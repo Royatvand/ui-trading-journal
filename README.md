@@ -1,75 +1,168 @@
-# THE LEDGER — Trading Journal
+[English](README.md) · [فارسی](README.fa.md)
 
-A local-first trading journal that runs entirely in your browser. No backend, no build step, no account:
-your data lives in the browser's IndexedDB and never leaves your machine.
+<p align="center">
+  <strong>THE LEDGER</strong><br>
+  <em>A local-first trading journal for recording trades and reviewing performance—right in your browser.</em>
+</p>
 
-[فارسی](#فارسی) · [English](#features)
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2ea44f.svg" alt="MIT License"></a>
+  <a href=".github/workflows/pages.yml"><img src="https://img.shields.io/badge/deploy-GitHub%20Pages-blue" alt="GitHub Pages deployment"></a>
+  <a href=".github/workflows/test.yml"><img src="https://img.shields.io/badge/tests-Playwright-smoke%20test-informational" alt="Playwright smoke test"></a>
+</p>
+
+THE LEDGER is a browser-based trading journal built with plain HTML, CSS, and JavaScript. It needs no application backend, account, or build step. Journal records are stored in IndexedDB in your browser, so they are not sent to a THE LEDGER server.
+
+## Why THE LEDGER?
+
+Your trading history is personal. THE LEDGER lets you record trades and inspect performance without creating an account or uploading journal data to an application server. It is local-first and designed to work without a backend; keep backups because browser storage is not permanent.
 
 ## Features
-- Multiple journals, each with its own balance, settings and customizable option lists
-- Trade logging with Win / Loss / **Break-even**, auto R-multiple, auto Day and Session
-- Analytics: win rate, profit factor, expectancy, drawdown, streaks, risk of ruin, long/short split
-- Session, weekday/hour, instrument and psychology breakdowns
-- Equity curve, calendar and monthly summary views
-- Pre-trade checklist (Persian), themes, JSON backup / restore (per journal or all journals)
 
-## Run it
-No install needed — open `index.html` in a modern browser.
-For a local server instead: `npm start` (or `python3 -m http.server`).
+- **Multiple journals** with separate balances, settings, and customizable option lists.
+- **Trade logging** with Win, Loss, and Break-even outcomes.
+- **Automatic trade fields:** R-multiple, day, and session.
+- **Performance analytics:** Win Rate, Profit Factor, Expectancy, Drawdown, streaks, Risk of Ruin, and long/short split.
+- **Performance breakdowns** by session, weekday, hour, instrument, and psychology.
+- **Review views:** equity curve, trading calendar, and monthly summary.
+- **Persian pre-trade checklist.**
+- **Themes** and customizable option lists.
+- **JSON backup and restore**, for one journal or all journals.
+
+## Quick start
+
+### Open directly
+
+1. Clone or download this repository.
+2. Open `index.html` in a modern browser.
+3. Create a journal and start logging trades.
+
+No build step or package installation is needed to open the app.
+
+### Run a local server
+
+Requires Node.js/npm:
+
+```bash
+npm install
+npm start
+```
+
+Alternatively, use Python if it is installed:
+
+```bash
+python3 -m http.server
+```
+
+Then open the local address printed by the server.
+
+## Screenshots
+
+Screenshots of the actual application can be added here when available.
+
+<!-- Replace these placeholders with real screenshots before enabling them. -->
+<!--
+| Dashboard | Trade history |
+|---|---|
+| ![Dashboard](docs/screenshots/dashboard.png) | ![Trade history](docs/screenshots/trades.png) |
+
+| Analytics | Calendar |
+|---|---|
+| ![Analytics](docs/screenshots/analytics.png) | ![Calendar](docs/screenshots/calendar.png) |
+-->
 
 ## Project structure
-```
-index.html          page shell, loads CSS then scripts in order
-css/fonts.css       @font-face (Vazirmatn, shipped in /fonts)
-css/style.css       all styles and theme variables
-fonts/              Vazirmatn woff2 (400 / 600 / 700)
-js/                 classic scripts sharing one global scope — ORDER MATTERS
-  01-config.js          constants, default option lists, checklist texts
-  02-theme-utils.js     theme engine, esc(), safeUrl(), result helpers
-  03-db.js              IndexedDB layer + image compression
-  04-analytics.js       analytics engine (memoized)
-  05-state-bootstrap.js global STATE, init, checklist helpers
-  06-actions.js         toast, settings schema, journal / trade / backup / option actions
-  07-render-dashboard.js top-level render, dashboard
-  08-log-form.js        trade form
-  09-analytics-views.js analytics panels, equity, calendar, monthly
-  10-history-modals.js  trade history, trade detail modal, checklist tab
-  11-options-ui.js      option manager modal, the `A` action object
-  12-boot.js            global click handling, startup
-tests/smoke.test.js Playwright smoke test (`npm install && npm test`)
-```
-Scripts are plain (non-module) so the app also works from `file://`.
 
-## Data & backups
-Everything is stored in IndexedDB (`LedgerTradingJournalDB`). Clearing site data deletes it, so export
-backups regularly (Export from the dashboard or inside a journal).
+```text
+.
+├── index.html
+├── css/
+│   ├── fonts.css
+│   └── style.css
+├── fonts/                  # bundled Vazirmatn font files
+├── js/                     # classic scripts; load order matters
+│   ├── 01-config.js
+│   ├── 02-theme-utils.js
+│   ├── 03-db.js
+│   ├── 04-analytics.js
+│   ├── 05-state-bootstrap.js
+│   ├── 06-actions.js
+│   ├── 07-render-dashboard.js
+│   ├── 08-log-form.js
+│   ├── 09-analytics-views.js
+│   ├── 10-history-modals.js
+│   ├── 11-options-ui.js
+│   └── 12-boot.js
+├── tests/
+│   └── smoke.test.js
+├── .github/workflows/
+├── package.json
+├── CHANGELOG.md
+└── LICENSE
+```
 
-Settings records use schema v2: `{ id, schema: 2, journalSettings, optionLists, archived }`.
-Older records are migrated automatically on load/import.
+The JavaScript files are classic scripts that share a global scope. Their numeric load order is intentional—do not reorder them without checking their dependencies.
+
+## Data, privacy, and backups
+
+- Journal data is stored in browser IndexedDB (`LedgerTradingJournalDB`); the app does not send it to a THE LEDGER backend.
+- **Browser storage is not a backup.** Clearing site data or losing the browser profile can delete journals.
+- Data is not automatically synchronized between browsers or devices.
+- Export JSON backups regularly and keep them somewhere safe.
+- Test restoring a backup before relying on it.
+- Treat exported JSON files as private financial records.
+
+The app includes automatic migration for older settings records when loading or importing them. Keep a separate backup before testing imports or making significant changes.
 
 ## Configuration
-- `BE_RISK_FRACTION` (`js/02-theme-utils.js`): in Auto mode, |P&L| ≤ this fraction of risk counts as break-even (default 0.05).
-- `SESSION_RANGES` (`js/02-theme-utils.js`): hour ranges used to auto-pick the Session from the entry time.
-  Adjust them to the clock/timezone you type your times in.
 
-## Deploy
-Push to `main`; the included workflow publishes the site to GitHub Pages
-(enable **Settings → Pages → Source: GitHub Actions**).
+- **Break-even threshold — `BE_RISK_FRACTION`** in `js/02-theme-utils.js`: in Auto mode, a P&L whose absolute value is at or below this fraction of the risk is classified as Break-even. The default is `0.05` (5% of risk).
+- **Session ranges — `SESSION_RANGES`** in `js/02-theme-utils.js`: used to assign a session from the entry time. Adjust the ranges to match the timezone of the times you enter.
+
+In Auto mode, Break-even trades are excluded from Win Rate but are included in P&L and Expectancy.
+
+## Tests
+
+The project includes a Playwright smoke test that opens the app in Chromium and exercises core journal, settings, and trade-data paths.
+
+```bash
+npm install
+npm test
+```
+
+Playwright needs a compatible Chromium browser. If you use a local browser binary, set `CHROMIUM_PATH` to its executable path as described in `tests/smoke.test.js`.
+
+## Deploy to GitHub Pages
+
+A GitHub Actions workflow is included at `.github/workflows/pages.yml`.
+
+1. Push your changes to the `main` branch.
+2. In repository settings, open **Settings → Pages**.
+3. Set the source to **GitHub Actions**.
+4. Check the Actions tab for the deployment result.
+
+## Contributing
+
+Bug reports, documentation fixes, and focused improvements are welcome.
+
+1. Open an issue describing the bug or proposed change.
+2. Fork the repository and create a branch.
+3. Keep changes focused and explain their purpose.
+4. Run `npm test` when changing application behavior.
+5. Open a pull request with a concise summary and relevant testing notes.
+
+Please preserve the project's core principles: local-first data, no required application backend, and straightforward browser use.
+
+## Roadmap
+
+Potential areas for future improvement:
+
+- Expand automated test coverage beyond the smoke test.
+- Improve accessibility and keyboard navigation.
+- Document analytics formulas and edge cases in more detail.
+
+These are possible future improvements, not claims about existing functionality.
 
 ## License
-MIT — see [LICENSE](LICENSE).
 
----
-
-## فارسی
-
-**THE LEDGER** یک ژورنال معاملاتی است که کاملاً داخل مرورگر اجرا می‌شود؛ بدون سرور و بدون ثبت‌نام. داده‌ها فقط در IndexedDB مرورگر خودت ذخیره می‌شوند.
-
-### اجرا
-فایل `index.html` را در مرورگر باز کن. برای سرور محلی: `npm start`.
-
-### نکات مهم
-- **بکاپ بگیر:** پاک کردن داده‌ی سایت از مرورگر یعنی پاک شدن ژورنال. از دکمه‌ی Export بکاپ JSON بگیر.
-- **ساختار:** `index.html` + پوشه‌های `css`، `js` و `fonts`. فایل‌های `js` به ترتیب شماره بارگذاری می‌شوند و ترتیب‌شان مهم است.
-- **Break-even:** در حالت Auto، معامله‌ای با سود/زیان کمتر از ۵٪ ریسک BE حساب می‌شود (`BE_RISK_FRACTION`). BE در وین‌ریت نمی‌آید ولی در PnL و Expectancy حساب می‌شود.
-- **Session خودکار:** بازه‌ی ساعت‌ها را در `SESSION_RANGES` مطابق ساعت خودت تنظیم کن.
+THE LEDGER is released under the [MIT License](LICENSE).
