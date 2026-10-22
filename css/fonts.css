@@ -1,0 +1,8 @@
+/* ── Vazirmatn (local) ──────────────────────────────────────────
+   The Persian UI text (checklist, help popovers) previously depended on
+   Google Fonts. The three weights actually used are subset to Arabic/Persian
+   glyphs plus basic Latin and shipped locally in /fonts.
+   ----------------------------------------------------------------- */
+@font-face{font-family:'Vazirmatn';font-style:normal;font-weight:400;font-display:swap;src:url('../fonts/Vazirmatn-400.woff2') format('woff2');}
+@font-face{font-family:'Vazirmatn';font-style:normal;font-weight:600;font-display:swap;src:url('../fonts/Vazirmatn-600.woff2') format('woff2');}
+@font-face{font-family:'Vazirmatn';font-style:normal;font-weight:700;font-display:swap;src:url('../fonts/Vazirmatn-700.woff2') format('woff2');}

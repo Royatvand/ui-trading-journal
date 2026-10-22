@@ -1,0 +1,14 @@
+{
+  "name": "the-ledger",
+  "version": "2.0.0",
+  "description": "THE LEDGER — a local-first, offline-capable trading journal (vanilla JS + IndexedDB).",
+  "private": true,
+  "scripts": {
+    "start": "npx --yes serve .",
+    "test": "node tests/smoke.test.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.48.0"
+  },
+  "license": "MIT"
+}
